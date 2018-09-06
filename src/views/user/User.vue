@@ -45,7 +45,7 @@
       </el-table-column>
     </el-table>
     <!-- 分页器 -->
-    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="totalCount">
+    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[1, 2, 3, 4]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="totalCount">
     </el-pagination>
     <!-- 添加用户对话框 -->
     <el-dialog title="添加用户" :visible.sync="adduserdialogFormVisible">
@@ -126,7 +126,7 @@ export default {
       value2: '',
       tableData: [],
       currentPage: 1,
-      pagesize: 10,
+      pagesize: 4,
       totalCount: 100,
       // 添加用户组件
       adduserdialogFormVisible: false,
@@ -177,7 +177,7 @@ export default {
   },
   methods: {
     inint () {
-      getuserList({ query: this.input5, pagenum: 1, pagesize: 10 }).then(
+      getuserList({ query: this.input5, pagenum: this.currentPage, pagesize: this.pagesize }).then(
         res => {
           console.log(res)
           this.tableData = res.data.users
@@ -189,19 +189,13 @@ export default {
     handleSizeChange (val) {
       console.log(`每页 ${val} 条`)
       this.pagesize = val
-      getuserList({ query: '', pagenum: 1, pagesize: val }).then(res => {
-        this.tableData = res.data.users
-      })
+      this.inint()
     },
     // 分页器
     handleCurrentChange (val) {
       console.log(`当前页: ${val}`)
       this.currentPage = val
-      getuserList({ query: '', pagenum: val, pagesize: this.pagesize }).then(
-        res => {
-          this.tableData = res.data.users
-        }
-      )
+      this.inint()
     },
     // 点击搜索以及键盘回车
     searchUser () {
