@@ -30,3 +30,15 @@ export const getuserList = (pa) => {
     return res.data
   })
 }
+// 点击确认添加用户
+export const adduserMsg = (pa) => {
+  return axios.post('users', pa).then(res => {
+    return res.data
+  })
+}
+// 编辑用户信息
+export const eaituserMsg = (pa) => {
+  return axios.put(`users/${pa.id}`, pa).then(res => {
+    return res.data
+  })
+}

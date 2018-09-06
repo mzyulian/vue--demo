@@ -52,8 +52,8 @@
             </el-aside>
             <el-container>
                 <el-header>
-                   <span class='myicon myicon-menu system-title' @click='isCollapse=!isCollapse'></span>
-                   <span class='toggle-btn'>电商后台管理系统</span>
+                   <span class='myicon myicon-menu toggle-btn' @click='isCollapse=!isCollapse'></span>
+                   <span class='system-title'>电商后台管理系统</span>
                    <div class='welcome'>
                      <span>你好:</span>
                      <span>admin</span>
