@@ -25,7 +25,7 @@
       </el-table-column>
       <el-table-column label="状态">
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949">
+          <el-switch v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949" @change='userstate(scope.row)'>
           </el-switch>
         </template>
       </el-table-column>
@@ -36,10 +36,10 @@
             <el-button type="primary" icon="el-icon-edit" circle plain @click='edituserDialog(scope.row)'></el-button>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="删除" placement="top">
-            <el-button type="danger" icon="el-icon-delete" circle plain></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle plain @click='deleteUser(scope.row)'></el-button>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="授权管理" placement="top">
-            <el-button type="warning" icon="el-icon-star-off" circle plain></el-button>
+            <el-button type="warning" icon="el-icon-star-off" circle plain @click='changeuserGrant(scope.row)'></el-button>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -88,13 +88,37 @@
         <el-button type="primary" @click="edituser('editform')">确 定</el-button>
       </div>
     </el-dialog>
-
+    <!-- 用户角色分配管理对话框 -->
+    <el-dialog title="授权管理" :visible.sync="usergrantdialogFormVisible">
+      <el-form :model="grantform" label-width="100px" ref='grantform'>
+        <el-form-item label="用户名:">
+          <el-input v-model="grantform.username" auto-complete="off" style="width:200px" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="用户角色:">
+          <el-select v-model="grantform.rid" placeholder="请选择">
+            <el-option v-for='item in Usergrantlist' :key="item.id" :label="item.roleName" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="usergrantdialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editusergrant">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 // 引入api请求文件
-import { getuserList, adduserMsg, eaituserMsg } from '@/api/index.js'
+import {
+  getuserList,
+  adduserMsg,
+  eaituserMsg,
+  deleteuserMsg,
+  changUserstate,
+  getALLusergrant,
+  setuserGrant
+} from '@/api/index.js'
 export default {
   data () {
     return {
@@ -136,7 +160,16 @@ export default {
         mobile: '',
         email: ''
       },
-      eaitUserdialogFormVisible: false
+      eaitUserdialogFormVisible: false,
+      // 用户角色分配管理
+      usergrantdialogFormVisible: false,
+      grantform: {
+        id: '',
+        username: '',
+        rid: ''
+      },
+      // 用户权限列表
+      Usergrantlist: []
     }
   },
   mounted () {
@@ -235,6 +268,100 @@ export default {
           })
         } else {
           this.$message.error('输入的数据不合法')
+        }
+      })
+    },
+    // 点击删除
+    deleteUser (scope) {
+      // 组件询问是否删除
+      this.$confirm(
+        `是否删除${scope.username}(id为${scope.id})这个用户?`,
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+      )
+        .then(() => {
+          // 点击确认删除
+          deleteuserMsg(scope).then(res => {
+            console.log(res)
+            if (res.meta.status === 200) {
+              this.$message({
+                type: 'success',
+                message: res.meta.msg
+              })
+              // 刷新
+              this.inint()
+            } else {
+              this.$message({
+                showClose: true,
+                message: res.meta.msg,
+                type: 'error'
+              })
+            }
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+    },
+    // 状态改变
+    userstate (scope) {
+      console.log(scope)
+      // 发送请求
+      changUserstate({ id: scope.id, state: scope.mg_state }).then(res => {
+        if (res.meta.status === 200) {
+          this.$message({
+            showClose: true,
+            message: res.meta.msg,
+            type: 'success'
+          })
+          // 刷新页面
+          this.inint()
+        } else {
+          this.$message({
+            showClose: true,
+            message: res.meta.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 改变用户的授权
+    changeuserGrant (row) {
+      // 将表格数据转到对话框
+      this.grantform.id = row.id
+      this.grantform.username = row.username
+      // 对话框显示
+      this.usergrantdialogFormVisible = true
+      // 获取用户权限
+      getALLusergrant().then(res => {
+        console.log(res)
+        this.Usergrantlist = res.data
+      })
+    },
+    // 点击确认改变权限
+    editusergrant () {
+      setuserGrant(this.grantform).then(res => {
+        console.log(res)
+        if (res.meta.status === 200) {
+          this.$message({
+            type: 'success',
+            message: res.meta.msg
+          })
+          // 设置成功，影藏对话框
+          this.usergrantdialogFormVisible = false
+        } else {
+          this.$message({
+            showClose: true,
+            message: res.meta.msg,
+            type: 'error'
+          })
         }
       })
     }

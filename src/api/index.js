@@ -42,3 +42,27 @@ export const eaituserMsg = (pa) => {
     return res.data
   })
 }
+// 点击删除用户
+export const deleteuserMsg = (pa) => {
+  return axios.delete(`users/${pa.id}`, pa).then(res => {
+    return res.data
+  })
+}
+// 改变用户状态
+export const changUserstate = (pa) => {
+  return axios.put(`users/${pa.id}/state/${pa.state}`, pa).then(res => {
+    return res.data
+  })
+}
+// 获取用户的所有权限
+export const getALLusergrant = () => {
+  return axios.get('roles').then(res => {
+    return res.data
+  })
+}
+// 点击确认改变权限
+export const setuserGrant = (pa) => {
+  return axios.put(`users/${pa.id}/role`, {rid: pa.id}).then(res => {
+    return res.data
+  })
+}
