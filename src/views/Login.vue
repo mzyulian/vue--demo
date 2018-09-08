@@ -18,6 +18,25 @@
            </el-form-item>
         </el-form>
     </div>
+    <!-- 粒子漂浮物 -->
+        <vue-particles
+            color="#fff"
+            :particleOpacity="0.7"
+            :particlesNumber="30"
+            shapeType="star"
+            :particleSize="5"
+            linesColor="#fff"
+            :linesWidth="2"
+            :lineLinked="true"
+            :lineOpacity="0.4"
+            :linesDistance="150"
+            :moveSpeed="3"
+            :hoverEffect="true"
+            hoverMode="grab"
+            :clickEffect="true"
+            clickMode="push"
+        >
+        </vue-particles>
  </div>
 </template>
 <script>
@@ -80,16 +99,21 @@ export default {
   position: fixed;
   width: 100%;
   height: 100%;
-  background-color: #2f4050;
+   background-image: url('../assets/sky.jpg');
+     background-position: -20% 10%;
+    background-size: contain;
+  background-color: #000;
 
   .container {
     position: absolute;
+    border-radius: 5px;
     left: 0;
     right: 0;
     width: 400px;
     padding: 0px 40px 15px 40px;
     margin: 200px auto;
     background: white;
+    background: rgba(216,220,229,0.5);
     .avatar {
       position: relative;
       left: 50%;

@@ -66,3 +66,33 @@ export const setuserGrant = (pa) => {
     return res.data
   })
 }
+// 权限管理接口
+export const getAllrightlistGrant = (type) => {
+  return axios.get(`rights/${type}`).then(res => {
+    return res.data
+  })
+}
+// 获取角色列表
+export const getALLrolesList = () => {
+  return axios.get('roles').then(res => {
+    return res.data
+  })
+}
+// 删除指定权限
+export const deleteAppointGrant = (pa) => {
+  return axios.delete(`roles/${pa.roleId}/rights/${pa.rightId}`, pa).then(res => {
+    return res.data
+  })
+}
+// 获取 tree 树状显示权限
+export const getAllRightTreeGrant = (type) => {
+  return axios.get(`rights/${type}`).then(res => {
+    return res.data
+  })
+}
+// 角色授权
+export const setUserRightgrant = (pa) => {
+  return axios.post(`roles/${pa.roleId}}/rights`, {rids: pa.rids}).then(res => {
+    return res.data
+  })
+}

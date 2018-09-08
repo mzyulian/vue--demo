@@ -3,7 +3,7 @@
         <el-container>
             <el-aside width="auto">
               <div class='logo'></div>
-                <el-menu class="el-menu-admin" @open="handleOpen" @close="handleClose" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" :unique-opened='true' :collapse='isCollapse' :router='true'>
+                <el-menu class="el-menu-admin" @open="handleOpen" @close="handleClose" background-color="#41b883" text-color="#fff" active-text-color="#384b5f" :unique-opened='true' :collapse='isCollapse' :router='true'>
                     <el-submenu index="1">
                         <template slot="title">
                             <i class="el-icon-location"></i>
@@ -16,17 +16,17 @@
                             </el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
-                    <el-submenu index="2">
+                    <el-submenu index="canse">
                         <template slot="title">
                             <i class="el-icon-location"></i>
                             <span>权限管理</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="2-1">
+                            <el-menu-item index="right">
                                 <i class="el-icon-menu"></i>
                                 <span slot="title">权限列表</span>
                             </el-menu-item>
-                            <el-menu-item index="2-2">
+                            <el-menu-item index="role">
                                 <i class="el-icon-menu"></i>
                                 <span slot="title">角色列表</span>
                             </el-menu-item>
@@ -57,7 +57,7 @@
                    <div class='welcome'>
                      <span>你好:</span>
                      <span>admin</span>
-                     <el-button type="text" @click='loginout'>退出</el-button>
+                     <el-button type="text" @click='loginout' style='color:red'>退出</el-button>
                    </div>
                 </el-header>
                 <el-main>
@@ -101,19 +101,19 @@ export default {
     height: 100%;
   }
   .el-aside {
-    background-color: #545c64;
+    background-color: #41b883;
   }
   .el-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #545c64;
+    background-color: #41b883;
   }
   .logo {
     height: 60px;
     background: url(../assets/timg.jpg);
     background-size: cover;
-    background-color: #989898;
+    background-color: #41b883;
   }
   .toggle-btn {
     padding: 0 15px;
@@ -123,7 +123,7 @@ export default {
     cursor: pointer;
     line-height: 60px;
     &:hover {
-      background-color: #4292cf;
+      background-color: #41b883;
     }
   }
   .system-title {
